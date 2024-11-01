@@ -1,0 +1,84 @@
+<% include ./partials/header.ejs %>
+  <div class="w-full min-h-screen bg-zinc-900 text-white py-5">
+      <div class="nav flex justify-between items-center px-4">
+        <h3 class="text-lg"><%= user.username %></h3>
+        <div class="icons flex gap-5">
+          <a href="/upload"><i class="text-[1.4rem] ri-add-box-line"></i></a>
+          <a href="/logout"><i class="text-[1.4rem] ri-logout-box-r-line"></i></a>
+        </div>
+      </div>
+      <div class="flex justify-between items-center pl-6 pr-[12vw] mt-8">
+        <div class="w-[19vw] h-[19vw] bg-sky-100 rounded-full overflow-hidden">
+          <img class="w-full h-full object-cover" src="/images/uploads/<%= user.picture %>" alt="">
+        </div>
+        <div class="stats flex gap-5 items-center justify-between">
+          <div class="flex flex-col items-center justify-center">
+            <h3><%= user.posts.length %></h3>
+            <h4>Posts</h4>
+          </div>
+          <div class="flex flex-col items-center justify-center">
+            <h3><%= user.followers.length %></h3>
+            <h4>Followers</h4>
+          </div>
+          <div class="flex flex-col items-center justify-center">
+            <h3><%= user.following.length %></h3>
+            <h4>Following</h4>
+          </div>
+        </div>
+      </div>
+      <div class="dets px-6 mt-5">
+        <h3 class="text-lg mb-1"><%= user.name %></h3>
+        <p class="text-xs tracking-tight opacity-50"><%= user.bio ?? "You have not set anything yet, (click edit profile to set)" %></p>
+      </div>
+      <div class="px-6 mt-5">
+        <a class="px-3 py-2 bg-zinc-800 text-xs rounded-md" href="/edit">Edit Profile</a>
+      </div>
+      <!-- Posts Section -->
+  <div class="posts w-full flex gap-1 py-2 mt-5 flex-wrap">
+    <% if(user.posts.length > 0) { %>
+      <% user.posts.reverse().forEach(function(post) { %>
+        <div class="post w-[32.5%] h-32 bg-sky-100 relative">
+          <!-- Clicking on this image will open the modal -->
+          <img class="w-full h-full object-cover cursor-pointer" src="/images/uploads/<%= post.picture %>" alt=""
+               onclick="openModal('<%= post.picture %>', '<%= post._id %>')">
+        </div>
+      <% }) %>
+    <% } else { %>
+      <div class="w-full flex justify-center items-center min-h-[20vh]">
+        <small class="opacity-50">No posts yet.</small>
+      </div>
+    <% } %>
+  </div>
+  </div>
+
+ <!-- Modal for displaying larger image and delete option -->
+<div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden">
+  <div class="relative bg-zinc-800 p-5 rounded-lg max-w-lg w-full">
+    <button 
+      class="absolute top-1 right-2 text-white text-3xl px-2 py-1 rounded hover:bg-zinc-700"
+      onclick="closeModal()">
+      <i class="ri-close-line"></i>
+    </button>
+    <img id="modalImage" class="w-full h-auto rounded mt-4" src="" alt="Post Image">
+    <form id="deleteForm" action="" method="POST" class="mt-4 text-center">
+      <button type="submit" class="text-white font-semibold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500  px-4 py-2 rounded">Delete Post</button>
+    </form>
+  </div>
+</div>
+
+
+<script>
+  // Open modal function
+  function openModal(imageSrc, postId) {
+    document.getElementById('modalImage').src = `/images/uploads/${imageSrc}`;
+    document.getElementById('deleteForm').action = `/posts/${postId}?_method=DELETE`;
+    document.getElementById('imageModal').classList.remove('hidden');
+  }
+
+  // Close modal function
+  function closeModal() {
+    document.getElementById('imageModal').classList.add('hidden');
+  }
+</script>
+
+<% include ./partials/footer.ejs %>

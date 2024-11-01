@@ -1,0 +1,18 @@
+<% include ./partials/header.ejs %>
+
+<div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50">
+    <div class="bg-white rounded-lg shadow-lg max-w-lg w-full relative text-center p-4">
+        <h1 class="text-2xl font-semibold text-red-500">Story Unavailable</h1>
+        <p>We're sorry, but the story you are looking for is not available.</p>
+        <p>You will be redirected back to the feed shortly.</p>
+    </div>
+</div>
+
+<script>
+    // Automatically redirect back to the feed after a set duration
+    setTimeout(() => {
+        window.location.href = '/feed'; // Redirect back to the feed
+    }, 5000); // 5000 ms = 5 seconds
+</script>
+
+<% include ./partials/footer.ejs %>
